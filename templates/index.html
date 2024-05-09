@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Task Manager</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Task Manager</h1>
+        <form id="addTaskForm" method="POST" action="/index">
+            <input type="text" name="title" placeholder="Task name" required>
+            <input type="text" name="description" placeholder="Description">
+            <button type="submit"><i class="fas fa-plus"></i></button>
+        </form>
+        <ul id="tasksList">
+            <!-- Tasks will be dynamically loaded here -->
+        </ul>
+        <div class="download-btn">
+            <a href="/download_excel"><button>Download the report in Excel</button></a>
+        </div>
+        <div class="log">
+            <h3><a href="/logout">logout</a></h1>
+        </div>
+    </div>
+    <script>
+        function sortTasks() {
+            const criteria = document.getElementById('sortSelect').value;
+            fetch(`/sort_tasks/${criteria}`)
+                .then(response => response.json())
+                .then(data => displayTasks(data.tasks, criteria));
+        }
+
+        function displayTasks(tasks, criteria) {
+            const tasksList = document.getElementById('tasksList');
+            tasksList.innerHTML = '';
+
+            tasks.forEach(task => {
+                const listItem = document.createElement('li');
+                listItem.classList.add('task');
+                if (task.completed) {
+                    listItem.classList.add('completed');
+                }
+
+                const taskText = document.createElement('span');
+                taskText.textContent = `${task.title}${task.description ? ' - ' + task.description : ''}`;
+                listItem.appendChild(taskText);
+
+                const iconsDiv = document.createElement('div');
+                iconsDiv.classList.add('icons');
+                if (!task.completed) {
+                    const completeLink = document.createElement('a');
+                    completeLink.href = `/complete/${task.id}`;
+                    completeLink.innerHTML = '<i class="far fa-check-circle"></i>';
+                    iconsDiv.appendChild(completeLink);
+                }
+                const deleteLink = document.createElement('a');
+                deleteLink.href = `/delete/${task.id}`;
+                deleteLink.innerHTML = '<i class="far fa-trash-alt"></i>';
+                iconsDiv.appendChild(deleteLink);
+
+                listItem.appendChild(iconsDiv);
+                tasksList.appendChild(listItem);
+            });
+
+            // Highlight the selected sort option
+            const sortOptions = document.querySelectorAll('#sortSelect option');
+            sortOptions.forEach(option => {
+                if (option.value === criteria) {
+                    option.setAttribute('selected', 'selected');
+                    option.dataset.selected = true;
+                } else {
+                    option.removeAttribute('selected');
+                    option.dataset.selected = false;
+                }
+            });
+        }
+        function completeTask(taskId) {
+                fetch(`/complete/${taskId}`)
+                .then(response => {
+                    if (response.ok) {
+                        // Remove the completed task from the task list
+                        const completedTask = document.getElementById(taskId);
+                        completedTask.parentNode.removeChild(completedTask);
+                    } else {
+                        console.error('Error completing task');
+                    }
+                })
+                .catch(error => console.error('Error completing task:', error));
+            }
+            function addTaskToDisplay(task) {
+                const listItem = document.createElement('li');
+                listItem.id = task._id; // Set task ID as element ID
+                listItem.classList.add('task');
+
+                const taskText = document.createElement('span');
+                taskText.textContent = `${task.title}${task.description ? ' - ' + task.description : ''}`;
+                listItem.appendChild(taskText);
+
+                const iconsDiv = document.createElement('div');
+                iconsDiv.classList.add('icons');
+                if (!task.completed) {
+                    const completeLink = document.createElement('a');
+                    completeLink.href = 'javascript:void(0)'; // Prevent link from navigating
+                    completeLink.addEventListener('click', () => completeTask(task._id)); // Call completeTask function when clicked
+                    completeLink.innerHTML = '<i class="far fa-check-circle"></i>';
+                    iconsDiv.appendChild(completeLink);
+                }
+                const deleteLink = document.createElement('a');
+                deleteLink.href = `/delete/${task._id}`;
+                deleteLink.innerHTML = '<i class="far fa-trash-alt"></i>';
+                iconsDiv.appendChild(deleteLink);
+
+                listItem.appendChild(iconsDiv);
+                document.getElementById('tasksList').appendChild(listItem);
+            }
+// Function to handle form submission and adding a new task to the task list
+document.getElementById('addTaskForm').addEventListener('submit', function(event) {
+    event.preventDefault();
+    const formData = new FormData(this);
+    fetch('/index', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        addTaskToDisplay(data);
+        // Clear form fields after adding task
+        document.getElementById('addTaskForm').reset();
+    })
+    .catch(error => console.error('Error:', error));
+});
+
+
+        // Load all tasks initially
+        window.onload = function() {
+            sortTasks();
+        };
+    </script>
+    <script>
+        function updateDownloadLink(criteria) {
+            var downloadLink = document.getElementById('downloadLink');
+            var linkText = '';
+
+            if (criteria === 'all') {
+                linkText = 'Download All in Excel';
+            } else if (criteria === 'completed') {
+                linkText = 'Download Completed in Excel';
+            } else if (criteria === 'notCompleted') {
+                linkText = 'Download Not Completed in Excel';
+            } else if (criteria === 'alphabetically') {
+                linkText = 'Download Alphabetically in Excel';
+            }
+
+            downloadLink.href = '/download_excel?criteria=' + criteria;
+            downloadLink.innerHTML = '<button>' + linkText + '</button>';
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,222 @@
+/* General Styles */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #222;
+    color: #fff;
+}
+
+.container {
+    width: 80%;
+    margin-top: 100px;
+    margin-left: 120px;
+    padding: 40px 20px;
+    background-color: #333;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.8);
+}
+.container1 {
+    width: 80%;
+    margin-top: 100px;
+    margin-left: 120px;
+    padding: 40px 20px;
+    background-color: #333;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.8);
+    
+}
+
+
+h1 {
+    text-align: center;
+    margin-bottom: 30px;
+    color: #ff6600;
+}
+
+/* Task Form */
+form {
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+input[type="text"] {
+    padding: 14px;
+    width: 300px;
+    border-radius: 8px;
+    border: 2px solid #2196F3;
+    background-color: #333;
+    color: #fff;
+    margin: 0 10px 10px 0;
+    transition: all 0.3s ease;
+}
+input[type="password"] {
+    padding: 14px;
+    width: 300px;
+    border-radius: 8px;
+    border: 2px solid #2196F3;
+    background-color: #333;
+    color: #fff;
+    margin: 0 10px 10px 0;
+    transition: all 0.3s ease;
+}
+input[type="email"] {
+    padding: 14px;
+    width: 300px;
+    border-radius: 8px;
+    border: 2px solid #2196F3;
+    background-color: #333;
+    color: #fff;
+    margin: 0 10px 10px 0;
+    transition: all 0.3s ease;
+}
+input[type="text"]::placeholder {
+    color: #888;
+}
+
+button {
+    padding: 14px 24px;
+    cursor: pointer;
+    background-color: #2196F3;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    margin-top: 0px;
+    transition: all 0.3s ease;
+}
+
+button:hover {
+    background-color: #0b7dda;
+    transform: translateY(-3px);
+}
+
+/* Task List */
+.task {
+    margin-bottom: 10px;
+    padding: 15px;
+    border-radius: 8px;
+    background-color: #444;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    transition: all 0.3s ease;
+    list-style: none;
+    counter-increment: task-counter;
+}
+
+.task::before {
+    content: counter(task-counter) ". ";
+    font-weight: bold;
+    margin-right: 5px;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.task:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
+}
+
+.completed::before {
+    color: #8BC34A;
+}
+
+.task:not(.completed)::before {
+    color: #f44336;
+}
+
+.task span {
+    flex: 1;
+    margin-right: 20px;
+    font-size: 18px;
+}
+
+.completed span {
+    text-decoration: line-through;
+    color: #888;
+}
+
+/* Icons */
+.icons {
+    display: flex;
+    align-items: center;
+}
+
+.icons a {
+    margin-left: 10px;
+    color: #2196F3;
+    font-size: 18px;
+    transition: all 0.3s ease;
+}
+
+.icons a:hover {
+    transform: scale(1.2);
+    color: #0b7dda;
+}
+
+/* Download Button */
+.download-btn {
+    text-align: right;
+    margin-top: 10px;
+}
+
+.download-btn button {
+    padding: 14px 24px;
+    background-color: #2196F3;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-weight: bold;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    transition: all 0.3s ease;
+}
+
+.download-btn button:hover {
+    background-color: #0b7dda;
+    transform: translateY(-3px);
+}
+
+/* Icons */
+.fa-plus,
+.fa-check-circle,
+.fa-trash-alt {
+    font-size: 18px;
+}
+
+/* Custom Dropdown Styling */
+#sortSelect {
+    appearance: none;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    background-color: #f2f2f2;
+    cursor: pointer;
+    width: 160px;
+    padding-right: 20px;
+    background-image: url('data:image/svg+xml;utf8,<svg fill="%23333" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M10 14l6-6H4l6 6z"/></svg>');
+    background-repeat: no-repeat;
+    background-position: right center;
+    text-align: left;
+    margin-left: 40px;
+    padding-left: 10px;
+    margin-bottom: 10px;
+}
+
+#sortSelect option {
+    padding: 8px;
+    border-radius: 10px;
+    font-size: 14px;
+}
+
+#sortSelect option[data-selected="true"] {
+    background-color: #a0a0a0;
+    position: relative;
+}
+
+#sortSelect option[data-default="true"] {
+    display: none;
+}
